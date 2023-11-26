@@ -1,4 +1,4 @@
-# Sales-Data-Analysis-with-RFM-Segmentation
+# Sales-Data-and-RFM-Analysis
 Analysis of sales data found online from a .csv file
 
 General overview of dataset using SQL and finishing with an RFM analysis
