@@ -1,7 +1,7 @@
 # Sales Data and RFM Analysis
 Analysis of sales dataset with RFM segmentation from a .csv file found online
 
-Tableau link: _tbd_
+Tableau link: https://public.tableau.com/app/profile/brian3741/viz/SalesDataAnalysiswithRFMSegmentation/Dashboard1
 
 
 ### RFM Segmentation - marketing technique to understand customer behavior based on 3 factors: Recency, Frequency, and Monetary Value
