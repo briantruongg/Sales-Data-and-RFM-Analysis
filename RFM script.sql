@@ -66,12 +66,23 @@ from sales_data_sample
 group by status
 order by 2 desc
 
+--what city has the top sales out of all countries?
+select CITY, COUNTRY, sum(SALES) Revenue
+from sales_data_sample
+group by city, country
+order by 3 desc
+--what city has most units sold out of all countries?
+select CITY, COUNTRY, count(ORDERNUMBER) Units
+from sales_data_sample
+group by city, country
+order by 3 desc
+
 --what city has the top sales in a given country?
-select CITY, sum(SALES) Revenue
+select CITY, COUNTRY, sum(SALES) Revenue
 from sales_data_sample
 where country = 'USA'
-group by city
-order by 2 desc
+group by city, country
+order by 3 desc
 --what product sells the most in the USA?
 select COUNTRY, YEAR_ID, PRODUCTLINE, sum(SALES) Revenue
 from sales_data_sample
@@ -81,6 +92,11 @@ order by 4 desc
 
 --sales performance by year?
 select YEAR_ID, sum(SALES) Revenue
+from sales_data_sample
+group by year_id
+order by 2 desc
+--units sold by year?
+select YEAR_ID, count(ORDERNUMBER) Units
 from sales_data_sample
 group by year_id
 order by 2 desc
@@ -103,6 +119,12 @@ where month_id = '11' and year_id = '2004' --change to see each year
 group by month_id, productline
 order by 3 desc
 ---classic cars exceed in both revenue and unit_sales for the month of november
+--find avg month that exceeds in sales by using (!=) operator to exclude 2005
+select MONTH_ID, avg(SALES) Revenue
+from sales_data_sample
+where year_id != '2005'
+group by month_id
+order by 2 desc
 
 
 --3. RFM ANALYSIS --use to find who our best customer is
@@ -113,6 +135,8 @@ order by 3 desc
 (
 	select
 		CUSTOMERNAME
+		,COUNTRY
+		,CITY
 		,max(ORDERNUMBER) last_order_date
 		,(select max (ORDERDATE) from sales_data_sample) max_order_date
 		,DATEDIFF(DD, max(ORDERDATE), (select max(ORDERDATE) from sales_data_sample)) recency_score --date difference between max_order_date and last_order_date in dataset to determine Recency
@@ -120,7 +144,7 @@ order by 3 desc
 		,avg(SALES) avg_monetary_score
 		,sum(SALES) monetary_score --aggregate revenue to determine Monetary Value
 	from sales_data_sample
-	group by CUSTOMERNAME
+	group by CUSTOMERNAME, COUNTRY, CITY
 )
 
 --3b. 
@@ -141,7 +165,7 @@ order by 3 desc
 	from rfm_scores c
 
 --3d. rfm_index uses #rfm CTE
-select CUSTOMERNAME, R, F, M,
+select CUSTOMERNAME, COUNTRY, CITY, R, F, M,
 	case
 		when R=4 or R=3 and F=4 or F=3 and M=4 or F=3 then '1 Champions'
 		when R=3 or R=2 and F=3 or F=2 and M=3 then '2 Potential Loyalist'
@@ -150,4 +174,4 @@ select CUSTOMERNAME, R, F, M,
 		when R=1 or R=2 and F=4 or F=3 and M=4 or M=3 then '5 At Risk Customers'
 	end rfm_index
 from #rfm
-order by 5 desc
+order by 7 asc
