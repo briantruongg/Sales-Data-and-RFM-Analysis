@@ -31,53 +31,73 @@ order by territory asc
 --2. ANALYSIS OF DATA --what do we want to know
 
 --sales performance by product line?
-select PRODUCTLINE, sum(SALES) Sales_Revenue
+select PRODUCTLINE, sum(SALES) Revenue
 from sales_data_sample
 group by productline
 order by 2 desc
 --sales performance by dealsize?
-select DEALSIZE, sum(SALES) Sales_Revenue
+select DEALSIZE, sum(SALES) Revenue
 from sales_data_sample
 group by dealsize
 order by 2 desc
+--sales performance by country?
+select COUNTRY, sum(SALES) Revenue
+from sales_data_sample
+group by country
+order by 2 desc
+--sales performance by shipping status?
+select STATUS, sum(SALES) Revenue
+from sales_data_sample
+group by status
+order by 2 desc
+--products that sold the most?
+select PRODUCTLINE, count(ORDERNUMBER) Units
+from sales_data_sample
+group by productline
+order by 2 desc
+--countries that purchased the most?
+select COUNTRY, count(ORDERNUMBER) Units
+from sales_data_sample
+group by country
+order by 2 desc
 
 --what city has the top sales in a given country?
-select CITY, sum(SALES) Sales_Revenue
+select CITY, sum(SALES) Revenue
 from sales_data_sample
 where country = 'USA'
 group by city
 order by 2 desc
 --what product sells the most in the USA?
-select COUNTRY, YEAR_ID, PRODUCTLINE, sum(SALES) Sales_Revenue
+select COUNTRY, YEAR_ID, PRODUCTLINE, sum(SALES) Revenue
 from sales_data_sample
 where country = 'USA'
 group by country, year_id, productline
 order by 4 desc
 
 --sales performance by year?
-select YEAR_ID, sum(SALES) Sales_Revenue
+select YEAR_ID, sum(SALES) Revenue
 from sales_data_sample
 group by year_id
 order by 2 desc
----check sales_revenue (2005 significantly lower)
+---check revenue (2005 significantly lower)
 select distinct MONTH_ID
 from sales_data_sample
 where year_id = '2005'
 ---2005 only recorded the first 5 months of the year
 --top performing sales month by given year? 
-select MONTH_ID, sum(SALES) Sales_Revenue
+select MONTH_ID, sum(SALES) Revenue
 from sales_data_sample
 where year_id = '2004' --change to see each year
 group by month_id
 order by 2 desc
 ---november was best performing month (holiday season?)
 --what product's sales performance was highest in november?
-select MONTH_ID, PRODUCTLINE, sum(SALES) Sales_Revenue, count(ORDERNUMBER) Unit_Sales
+select MONTH_ID, PRODUCTLINE, sum(SALES) Revenue, count(ORDERNUMBER) Unit_Sales
 from sales_data_sample
 where month_id = '11' and year_id = '2004' --change to see each year
 group by month_id, productline
 order by 3 desc
----classic cars exceed in both sales_revenue and unit_sales for the month of november
+---classic cars exceed in both revenue and unit_sales for the month of november
 
 
 --3. RFM ANALYSIS --use to find who our best customer is
